@@ -1,14 +1,19 @@
+#include <stdbool.h>
+
 #include "printf.h"
 #include "input.h"
 #include "runner.h"
 
 int day1_part1(char * input, int length);
 int day1_part2(char * input, int length);
+int day2_part1(char * input, int length);
+int day2_part2(char * input, int length);
 
 typedef int (* part_func)(char * input, int length);
 
 part_func solution[][2] = {
   {day1_part1, day1_part2},
+  {day2_part1, day2_part2},
 };
 const int solution_days = (sizeof (solution)) / (sizeof (solution[0]));
 

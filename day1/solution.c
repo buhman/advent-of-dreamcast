@@ -1,13 +1,13 @@
-#include "input.h"
 #include "parse.h"
 #include "heapsort.h"
+#include "abs.h"
 
 struct list {
   int left[1000];
   int right[1000];
 };
 
-int parse_input(const char * input, int length, struct list * list)
+static int parse_input(const char * input, int length, struct list * list)
 {
   const char * end = input + length;
 
@@ -21,14 +21,6 @@ int parse_input(const char * input, int length, struct list * list)
   }
 
   return i;
-}
-
-int abs(int n)
-{
-  if (n < 0)
-    return -n;
-  else
-    return n;
 }
 
 int day1_part1(char * input, int length)

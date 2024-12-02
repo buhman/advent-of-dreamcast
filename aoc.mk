@@ -21,5 +21,14 @@ DAY1_OBJ = \
 	day1/input.txt.o \
 	day1/solution.o
 
+DAY2_OBJ = \
+	day2/sample1.txt.o \
+	day2/input.txt.o \
+	day2/solution.o
+
+DAY_OBJ = \
+	$(DAY1_OBJ) \
+	$(DAY2_OBJ)
+
 aoc.elf: LDSCRIPT = $(LIB)/main.lds
-aoc.elf: $(START_OBJ) $(OBJ) $(DREAMCAST_OBJ) $(DAY1_OBJ)
+aoc.elf: $(START_OBJ) $(OBJ) $(DREAMCAST_OBJ) $(DAY_OBJ)

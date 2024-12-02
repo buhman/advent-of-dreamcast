@@ -6,6 +6,9 @@
 #include "day1/sample1.txt.h"
 #include "day1/input.txt.h"
 
+#include "day2/sample1.txt.h"
+#include "day2/input.txt.h"
+
 struct start_size {
   char * start;
   uint32_t size;
@@ -14,6 +17,9 @@ struct start_size {
 static struct start_size input[] = {
   { (  char *)&_binary_day1_input_txt_start,
     (uint32_t)&_binary_day1_input_txt_size   },
+
+  { (  char *)&_binary_day2_input_txt_start,
+    (uint32_t)&_binary_day2_input_txt_size   },
 };
 
 static struct start_size sample[][2] = {
@@ -22,6 +28,12 @@ static struct start_size sample[][2] = {
       (uint32_t)&_binary_day1_sample1_txt_size   },
     { (  char *)&_binary_day1_sample1_txt_start,
       (uint32_t)&_binary_day1_sample1_txt_size   },
+  },
+  {
+    { (  char *)&_binary_day2_sample1_txt_start,
+      (uint32_t)&_binary_day2_sample1_txt_size   },
+    { (  char *)&_binary_day2_sample1_txt_start,
+      (uint32_t)&_binary_day2_sample1_txt_size   },
   },
 };
 
