@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "parse.h"
 
@@ -41,5 +42,15 @@ const char * parse_base10(const char * s, int * n)
     s++;
   }
 
+  return s;
+}
+
+const char * parse_match(const char * s, const char * m)
+{
+  while (*m != 0) {
+    if (*s++ != *m++) {
+      return NULL;
+    }
+  }
   return s;
 }

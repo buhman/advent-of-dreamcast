@@ -16,19 +16,7 @@ DREAMCAST_OBJ = \
 	$(LIB)/font/dejavusansmono/dejavusansmono.data.o \
 	$(LIB)/sh7091/serial.o
 
-DAY1_OBJ = \
-	day1/sample1.txt.o \
-	day1/input.txt.o \
-	day1/solution.o
-
-DAY2_OBJ = \
-	day2/sample1.txt.o \
-	day2/input.txt.o \
-	day2/solution.o
-
-DAY_OBJ = \
-	$(DAY1_OBJ) \
-	$(DAY2_OBJ)
+include solutions.mk
 
 aoc.elf: LDSCRIPT = $(LIB)/main.lds
 aoc.elf: $(START_OBJ) $(OBJ) $(DREAMCAST_OBJ) $(DAY_OBJ)
