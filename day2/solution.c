@@ -28,6 +28,14 @@ static int parse_input(const char * input, int length, struct report * report)
   return i;
 }
 
+static int int_sign(int n)
+{
+  if (n < 0)
+    return -1;
+  else
+    return 1;
+}
+
 static bool report_safe(struct report * report, int skip)
 {
   int last_sign = 0;
@@ -45,7 +53,7 @@ static bool report_safe(struct report * report, int skip)
     if (abs(rate) < 1 || abs(rate) > 3)
       return false; // unsafe
 
-    int sign = rate / abs(rate);
+    int sign = int_sign(sign);
     if (last_sign != 0 && sign != last_sign)
       return false; // unsafe
 

@@ -8,4 +8,7 @@ DAY_OBJ = \
 	day3/sample1.txt.o \
 	day3/sample2.txt.o \
 	day3/input.txt.o \
-	day3/solution.o
+	day3/solution.o \
+	day4/sample1.txt.o \
+	day4/input.txt.o \
+	day4/solution.o

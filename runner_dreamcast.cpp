@@ -278,6 +278,6 @@ int main()
     transfer_scene(font, glyphs);
   }
 
-  while (1);
+  //while (1);
   serial::string("return\n");
 }
