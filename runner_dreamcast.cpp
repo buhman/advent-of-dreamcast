@@ -370,7 +370,7 @@ int main()
       done = true;
       done_frame = frame;
     }
-    if (done && (frame == done_frame + 2))
+    if (done && (frame == done_frame + 3))
       break;
   }
 

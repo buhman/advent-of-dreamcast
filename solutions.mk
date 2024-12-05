@@ -11,4 +11,7 @@ DAY_OBJ = \
 	day3/solution.o \
 	day4/sample1.txt.o \
 	day4/input.txt.o \
-	day4/solution.o
+	day4/solution.o \
+	day5/sample1.txt.o \
+	day5/input.txt.o \
+	day5/solution.o
