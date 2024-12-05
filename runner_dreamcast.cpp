@@ -16,6 +16,12 @@
 
 #include "sh7091/store_queue.hpp"
 #include "sh7091/serial.hpp"
+#include "sh7091/vbr.hpp"
+#include "sh7091/sh7091.hpp"
+#include "sh7091/sh7091_bits.hpp"
+
+#include "systembus.hpp"
+#include "systembus_bits.hpp"
 
 #include "font/font.hpp"
 #include "font/dejavusansmono/dejavusansmono.data.h"
@@ -161,39 +167,167 @@ void copy_font(const uint8_t * src,
   }
 }
 
+constexpr uint32_t ta_alloc = ta_alloc_ctrl::pt_opb::no_list
+                            | ta_alloc_ctrl::tm_opb::no_list
+                            | ta_alloc_ctrl::t_opb::_32x4byte
+                            | ta_alloc_ctrl::om_opb::no_list
+                            | ta_alloc_ctrl::o_opb::no_list;
+
+constexpr int render_passes = 1;
+constexpr struct opb_size opb_size[render_passes] = {
+  {
+    .opaque = 0,
+    .opaque_modifier = 0,
+    .translucent = 32 * 4,
+    .translucent_modifier = 0,
+    .punch_through = 0
+  }
+};
+
+static int ta;
+static int core;
+
+const struct font * font;
+const struct glyph * glyphs;
+
+constexpr int framebuffer_width = 640;
+constexpr int framebuffer_height = 480;
+constexpr int tile_width = framebuffer_width / 32;
+constexpr int tile_height = framebuffer_height / 32;
+
+static uint32_t frame = 0;
+
+void render()
+{
+  if (core >= 0) {
+    // core = 0  ; core = 1
+    // ta = 1    ; ta = 0
+    core_wait_end_of_render_video();
+    frame += 1;
+    holly.FB_R_SOF1 = texture_memory_alloc::framebuffer[core].start;
+  }
+
+  // core = -2 ; core = 1 ; core = 0
+  // ta = -1   ; ta = 0   ; ta = 1
+  core += 1;
+  ta += 1;
+  if (core > 1) core = 0;
+  if (ta > 1) ta = 0;
+
+  if (core >= 0) {
+    // core = 1 ; core = 0
+    // ta = 0   ; ta = 1
+    ta_wait_translucent_list();
+
+    core_start_render2(texture_memory_alloc::region_array[core].start,
+                       texture_memory_alloc::isp_tsp_parameters[core].start,
+                       texture_memory_alloc::background[core].start,
+                       texture_memory_alloc::framebuffer[core].start,
+                       framebuffer_width);
+  }
+
+  // core = -1 ; core = 1 ; core = 0
+  // ta = 0    ; ta = 0   ; ta = 1
+  ta_polygon_converter_init2(texture_memory_alloc::isp_tsp_parameters[ta].start,
+                             texture_memory_alloc::isp_tsp_parameters[ta].end,
+                             texture_memory_alloc::object_list[ta].start,
+                             texture_memory_alloc::object_list[ta].end,
+                             opb_size[0].total(),
+                             ta_alloc,
+                             tile_width,
+                             tile_height);
+  transfer_scene(font, glyphs);
+}
+
+void vbr600()
+{
+  /*
+  serial::string("vbr600\n");
+  serial::string("expevt ");
+  serial::integer<uint16_t>(sh7091.CCN.EXPEVT);
+  serial::string("intevt ");
+  serial::integer<uint16_t>(sh7091.CCN.INTEVT);
+  serial::string("tra ");
+  serial::integer<uint16_t>(sh7091.CCN.TRA);
+
+  serial::string("istnrm ");
+  serial::integer<uint32_t>(system.ISTNRM & system.IML6NRM);
+  */
+
+  render();
+
+  // reset v_blank_in interrupt
+  system.ISTNRM = istnrm::v_blank_in_interrupt;
+
+  return;
+}
+
+void vbr400()
+{
+  serial::string("vbr400\n");
+  while (1);
+}
+
+void vbr100()
+{
+  serial::string("vbr100\n");
+  while (1);
+}
+
+void interrupt_init()
+{
+  sh7091.CCN.INTEVT = 0;
+  sh7091.CCN.EXPEVT = 0;
+
+  system.IML2NRM = 0;
+  system.IML2ERR = 0;
+  system.IML2EXT = 0;
+
+  system.IML4NRM = 0;
+  system.IML4ERR = 0;
+  system.IML4EXT = 0;
+
+  system.IML6NRM = 0;
+  system.IML6ERR = 0;
+  system.IML6EXT = 0;
+
+  // enable v-blank-in interrupt at IRL level 6
+  system.IML6NRM = istnrm::v_blank_in_interrupt;
+
+  const uint32_t vbr = reinterpret_cast<uint32_t>(&__vbr_link_start) - 0x100;
+  // set VBR
+  asm volatile ("ldc %0,vbr"
+		:
+		: "r" (vbr));
+
+  uint32_t sr;
+  // read current SR
+  asm volatile ("stc sr,%0"
+		: "=r" (sr));
+
+  // unset interrupt block bit
+  sr &= ~sh::sr::bl;
+  // enable interrupt level 6
+  sr &= ~sh::sr::imask(15);
+  sr |= sh::sr::imask(0b0100);
+
+  // set new SR
+  asm volatile ("ldc %0,sr"
+		:
+		: "r" (sr));
+}
+
 int main()
 {
   serial::init(0);
   serial::string("framebuffer: ");
   serial::integer<uint32_t>((uint32_t)&texture_memory32[texture_memory_alloc::framebuffer[0].start / 4]);
 
-  constexpr uint32_t ta_alloc = ta_alloc_ctrl::pt_opb::no_list
-			      | ta_alloc_ctrl::tm_opb::no_list
-			      | ta_alloc_ctrl::t_opb::_32x4byte
-			      | ta_alloc_ctrl::om_opb::no_list
-                              | ta_alloc_ctrl::o_opb::no_list;
-
-  constexpr int render_passes = 1;
-  constexpr struct opb_size opb_size[render_passes] = {
-    {
-      .opaque = 0,
-      .opaque_modifier = 0,
-      .translucent = 32 * 4,
-      .translucent_modifier = 0,
-      .punch_through = 0
-    }
-  };
-
   holly.SOFTRESET = softreset::pipeline_soft_reset
 		  | softreset::ta_soft_reset;
   holly.SOFTRESET = 0;
 
   core_init();
-
-  constexpr int framebuffer_width = 640;
-  constexpr int framebuffer_height = 480;
-  constexpr int tile_width = framebuffer_width / 32;
-  constexpr int tile_height = framebuffer_height / 32;
 
   region_array_multipass(tile_width,
 			 tile_height,
@@ -213,71 +347,32 @@ int main()
   background_parameter2(texture_memory_alloc::background[1].start,
 			0xff220033);
 
-  auto font = reinterpret_cast<const struct font *>(&_binary_font_dejavusansmono_dejavusansmono_data_start);
-  auto glyphs = reinterpret_cast<const struct glyph *>(&font[1]);
+  font = reinterpret_cast<const struct font *>(&_binary_font_dejavusansmono_dejavusansmono_data_start);
+  glyphs = reinterpret_cast<const struct glyph *>(&font[1]);
   auto texture = reinterpret_cast<const uint8_t *>(&glyphs[font->glyph_count]);
 
   copy_font(texture, font->max_z_curve_ix);
   palette_data<256>();
 
-  int ta = -1;
-  int core = -2;
-
   struct runner_state runner_state = {0};
 
   video_output::set_mode_vga();
 
+  ta = -1;
+  core = -2;
+
+  interrupt_init();
+
+  uint32_t done_frame = 0;
   bool done = false;
-
   while (true) {
-    if (core >= 0) {
-      // core = 0  ; core = 1
-      // ta = 1    ; ta = 0
-      core_wait_end_of_render_video();
-      while (!spg_status::vsync(holly.SPG_STATUS));
-      holly.FB_R_SOF1 = texture_memory_alloc::framebuffer[core].start;
-      while (spg_status::vsync(holly.SPG_STATUS));
+    if (!done && runner_tick(&runner_state)) {
+      done = true;
+      done_frame = frame;
     }
-
-    if (core == 0) {
-      if (done == true)
-        break;
-      done = runner_tick(&runner_state);
-    }
-
-    // core = -2 ; core = 1 ; core = 0
-    // ta = -1   ; ta = 0   ; ta = 1
-    core += 1;
-    ta += 1;
-    if (core > 1) core = 0;
-    if (ta > 1) ta = 0;
-
-    if (core >= 0) {
-      // core = 1 ; core = 0
-      // ta = 0   ; ta = 1
-      ta_wait_translucent_list();
-
-      core_start_render2(texture_memory_alloc::region_array[core].start,
-			 texture_memory_alloc::isp_tsp_parameters[core].start,
-			 texture_memory_alloc::background[core].start,
-			 texture_memory_alloc::framebuffer[core].start,
-			 framebuffer_width);
-    }
-
-
-    // core = -1 ; core = 1 ; core = 0
-    // ta = 0    ; ta = 0   ; ta = 1
-    ta_polygon_converter_init2(texture_memory_alloc::isp_tsp_parameters[ta].start,
-			       texture_memory_alloc::isp_tsp_parameters[ta].end,
-			       texture_memory_alloc::object_list[ta].start,
-			       texture_memory_alloc::object_list[ta].end,
-			       opb_size[0].total(),
-			       ta_alloc,
-			       tile_width,
-			       tile_height);
-    transfer_scene(font, glyphs);
+    if (done && (frame == done_frame + 2))
+      break;
   }
 
-  //while (1);
   serial::string("return\n");
 }
