@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
 
@@ -88,7 +89,7 @@ int parse_input(const char * input, int length, struct instruction * ins)
   return i;
 }
 
-int day3_part1(const char * input, int length)
+int64_t day3_part1(const char * input, int length)
 {
   struct instruction ins[1000];
 
@@ -103,7 +104,7 @@ int day3_part1(const char * input, int length)
   return sum;
 }
 
-int day3_part2(const char * input, int length)
+int64_t day3_part2(const char * input, int length)
 {
   struct instruction ins[1000];
 

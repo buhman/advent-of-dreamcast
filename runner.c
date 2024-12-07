@@ -1,11 +1,12 @@
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #include "printf.h"
 #include "input.h"
 #include "runner.h"
 
-typedef int (* part_func)(const char * input, int length);
+typedef int64_t (* part_func)(const char * input, int length);
 typedef void (* render_func)(const struct font * font,
                              const struct glyph * glyphs,
                              const void * maple_ft0_data);
@@ -34,9 +35,9 @@ bool runner_tick(struct runner_state * runner_state)
   int length;
   //open_sample(day + 1, part + 1, &buf, &length);
   open_input(day + 1, &buf, &length);
-  int answer = solution[day].part[part](buf, length);
+  int64_t answer = solution[day].part[part](buf, length);
 
-  printf("day %d part %d: %d\n", day + 1, part + 1, answer);
+  printf("day %d part %d: %l\n", day + 1, part + 1, answer);
 
   runner_state->tick += 1;
 

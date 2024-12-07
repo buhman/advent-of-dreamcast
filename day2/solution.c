@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdbool.h>
 
 #include "parse.h"
@@ -64,7 +65,7 @@ static bool report_safe(struct report * report, int skip)
   return true;
 }
 
-int day2_part1(const char * input, int length)
+int64_t day2_part1(const char * input, int length)
 {
   struct report report[1000];
 
@@ -78,7 +79,7 @@ int day2_part1(const char * input, int length)
   return sum;
 }
 
-int day2_part2(const char * input, int length)
+int64_t day2_part2(const char * input, int length)
 {
   struct report report[1000];
 

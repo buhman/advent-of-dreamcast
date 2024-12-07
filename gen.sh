@@ -13,6 +13,8 @@ if [ ! -z "$day" ]; then
 
     mkdir -p day${day}
     cat <<EOF > day${day}/solution.c
+#include <stdint.h>
+
 int day${day}_part1(const char * input, int length)
 {
   return -1;
@@ -96,8 +98,8 @@ echo >> solutions.mk
 
 truncate -s0 runner.inc
 for i in day* ; do
-    echo "int ${i}_part1(const char * input, int length);" >> runner.inc
-    echo "int ${i}_part2(const char * input, int length);" >> runner.inc
+    echo "int64_t ${i}_part1(const char * input, int length);" >> runner.inc
+    echo "int64_t ${i}_part2(const char * input, int length);" >> runner.inc
     if [ -f ${i}/render.cpp ]; then
         echo "void ${i}_render(const struct font * font," >> runner.inc
         echo "                 const struct glyph * glyphs," >> runner.inc

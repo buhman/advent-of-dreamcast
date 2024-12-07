@@ -45,6 +45,23 @@ const char * parse_base10(const char * s, int * n)
   return s;
 }
 
+const char * parse_base10_64(const char * s, int64_t * n)
+{
+  *n = 0;
+
+  while (true) {
+    int digit = base10_digit(*s);
+    if (digit == -1)
+      break;
+
+    *n *= 10;
+    *n += digit;
+    s++;
+  }
+
+  return s;
+}
+
 const char * parse_match(const char * s, const char * m)
 {
   while (*m != 0) {

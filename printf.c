@@ -8,6 +8,7 @@
 
 enum format_type {
   FORMAT_BASE10,
+  FORMAT_BASE10_64,
   FORMAT_BASE16,
   FORMAT_STRING,
   FORMAT_PERCENT,
@@ -37,6 +38,9 @@ static const char * parse_escape(const char * format, struct format * ft)
     return format;
   case 'd':
     ft->type = FORMAT_BASE10;
+    return format + 1;
+  case 'l':
+    ft->type = FORMAT_BASE10_64;
     return format + 1;
   case 'x':
     ft->type = FORMAT_BASE16;
@@ -74,6 +78,14 @@ void _printf(const char * format, ...)
             int32_t num = va_arg(args, int32_t);
             char * s = &global_output_buffer.buf[global_output_buffer.buf_ix];
             int offset = unparse_base10(s, num, ft.pad_length, ft.fill_char);
+            global_output_buffer.buf_ix += offset;
+          }
+          break;
+        case FORMAT_BASE10_64:
+          {
+            int64_t num = va_arg(args, int64_t);
+            char * s = &global_output_buffer.buf[global_output_buffer.buf_ix];
+            int offset = unparse_base10_64(s, num, ft.pad_length, ft.fill_char);
             global_output_buffer.buf_ix += offset;
           }
           break;

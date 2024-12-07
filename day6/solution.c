@@ -1,5 +1,7 @@
+#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+
 #include "printf.h"
 #include "parse.h"
 
@@ -128,7 +130,7 @@ void state_init(int part,
   day6_state.guard[0] = guard;
 }
 
-int day6_part1(const char * input, int length)
+int64_t day6_part1(const char * input, int length)
 {
   int stride = parse_stride(input, length);
   int height = parse_height(input, length);
@@ -203,7 +205,7 @@ static bool speculative_obstacle_causes_loop(const char * input,
   return false;
 }
 
-int day6_part2(const char * input, int length)
+int64_t day6_part2(const char * input, int length)
 {
   int stride = parse_stride(input, length);
   int height = parse_height(input, length);

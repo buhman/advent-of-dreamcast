@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdbool.h>
 
 #include "parse.h"
@@ -115,12 +116,12 @@ static int solve(const char * input, int length, bool correctly_ordered)
   return sum;
 }
 
-int day5_part1(const char * input, int length)
+int64_t day5_part1(const char * input, int length)
 {
   return solve(input, length, true);
 }
 
-int day5_part2(const char * input, int length)
+int64_t day5_part2(const char * input, int length)
 {
   return solve(input, length, false);
 }

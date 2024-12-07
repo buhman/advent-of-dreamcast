@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdbool.h>
 
 #include "printf.h"
@@ -131,7 +132,7 @@ static bool offset_match_cross(const char * input,
   return match1 || match2;
 }
 
-int day4_part1(const char * input, int length)
+int64_t day4_part1(const char * input, int length)
 {
   int stride = parse_stride(input, length);
   int height = parse_height(input, length);
@@ -159,7 +160,7 @@ int day4_part1(const char * input, int length)
   return match_count;
 }
 
-int day4_part2(const char * input, int length)
+int64_t day4_part2(const char * input, int length)
 {
   int stride = parse_stride(input, length);
   int height = parse_height(input, length);
