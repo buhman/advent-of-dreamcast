@@ -53,7 +53,7 @@ static bool report_safe(struct report * report, int skip)
     if (abs(rate) < 1 || abs(rate) > 3)
       return false; // unsafe
 
-    int sign = int_sign(sign);
+    int sign = int_sign(rate);
     if (last_sign != 0 && sign != last_sign)
       return false; // unsafe
 
@@ -64,7 +64,7 @@ static bool report_safe(struct report * report, int skip)
   return true;
 }
 
-int day2_part1(char * input, int length)
+int day2_part1(const char * input, int length)
 {
   struct report report[1000];
 
@@ -78,7 +78,7 @@ int day2_part1(char * input, int length)
   return sum;
 }
 
-int day2_part2(char * input, int length)
+int day2_part2(const char * input, int length)
 {
   struct report report[1000];
 

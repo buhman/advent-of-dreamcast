@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <bit>
 
 #include "holly/texture_memory_alloc2.hpp"
 #include "holly/isp_tsp.hpp"
@@ -23,13 +24,68 @@
 #include "systembus.hpp"
 #include "systembus_bits.hpp"
 
-#include "font/font.hpp"
+#include "font/font.h"
 #include "font/dejavusansmono/dejavusansmono.data.h"
 
 #include "palette.hpp"
 
 #include "printf.h"
 #include "runner.h"
+
+#include "maple/maple.hpp"
+#include "maple/maple_host_command_writer.hpp"
+#include "maple/maple_bus_bits.hpp"
+#include "maple/maple_bus_commands.hpp"
+#include "maple/maple_bus_ft0.hpp"
+
+static ft0::data_transfer::data_format maple_ft0_data[4];
+
+static uint8_t send_buf[1024] __attribute__((aligned(32)));
+static uint8_t recv_buf[1024] __attribute__((aligned(32)));
+
+static bool maple_wait = false;
+
+void do_get_condition()
+{
+  if (maple_wait)
+    maple::dma_wait_complete();
+
+  auto writer = maple::host_command_writer(send_buf, recv_buf);
+
+  writer.append_command_all_ports<maple::device_request, maple::device_status>(false);
+
+  using command_type = maple::get_condition;
+  using response_type = maple::data_transfer<ft0::data_transfer::data_format>;
+
+  auto [host_command, host_response]
+    = writer.append_command_all_ports<command_type, response_type>();
+
+  host_command->bus_data.data_fields.function_type = std::byteswap(function_type::controller);
+
+  maple::dma_start(send_buf, writer.send_offset,
+                   recv_buf, writer.recv_offset);
+  maple_wait = true;
+
+  for (uint8_t port = 0; port < 4; port++) {
+    auto& bus_data = host_response[port].bus_data;
+    maple_ft0_data[port].digital_button = 0;
+    if (bus_data.command_code != response_type::command_code) {
+      return;
+    }
+    auto& data_fields = bus_data.data_fields;
+    if ((std::byteswap(data_fields.function_type) & function_type::controller) == 0) {
+      return;
+    }
+
+    maple_ft0_data[port].digital_button = data_fields.data.digital_button;
+    maple_ft0_data[port].analog_coordinate_axis[0] = data_fields.data.analog_coordinate_axis[0];
+    maple_ft0_data[port].analog_coordinate_axis[1] = data_fields.data.analog_coordinate_axis[1];
+    maple_ft0_data[port].analog_coordinate_axis[2] = data_fields.data.analog_coordinate_axis[2];
+    maple_ft0_data[port].analog_coordinate_axis[3] = data_fields.data.analog_coordinate_axis[3];
+    maple_ft0_data[port].analog_coordinate_axis[4] = data_fields.data.analog_coordinate_axis[4];
+    maple_ft0_data[port].analog_coordinate_axis[5] = data_fields.data.analog_coordinate_axis[5];
+  }
+}
 
 struct vertex {
   float x;
@@ -49,7 +105,7 @@ const struct vertex strip_vertices[4] = {
 constexpr uint32_t strip_length = (sizeof (strip_vertices)) / (sizeof (struct vertex));
 
 
-void transform_start(const uint32_t texture_width, uint32_t texture_height)
+void glyph_start(const uint32_t texture_width, uint32_t texture_height)
 {
   const uint32_t parameter_control_word = para_control::para_type::polygon_or_modifier_volume
                                         | para_control::list_type::translucent
@@ -129,7 +185,7 @@ int32_t transform_char(const uint32_t texture_width,
 void transfer_scene(const struct font * font,
                     const struct glyph * glyphs)
 {
-  transform_start(font->texture_width, font->texture_height);
+  glyph_start(font->texture_width, font->texture_height);
 
   int32_t horizontal_advance = font->face_metrics.max_advance / 5; // 26.6 fixed point
   int32_t vertical_advance = font->face_metrics.height; // 26.6 fixed point
@@ -151,10 +207,6 @@ void transfer_scene(const struct font * font,
                                            vertical_advance);
     }
   }
-
-  *reinterpret_cast<ta_global_parameter::end_of_list *>(store_queue) =
-    ta_global_parameter::end_of_list(para_control::para_type::end_of_list);
-  sq_transfer_32byte(ta_fifo_polygon_converter);
 }
 
 void copy_font(const uint8_t * src,
@@ -197,6 +249,8 @@ constexpr int tile_height = framebuffer_height / 32;
 
 static uint32_t frame = 0;
 
+struct runner_state runner_state = {0};
+
 void render()
 {
   if (core >= 0) {
@@ -236,7 +290,15 @@ void render()
                              ta_alloc,
                              tile_width,
                              tile_height);
+  ///
   transfer_scene(font, glyphs);
+  if (runner_state.want_render) {
+    runner_render(&runner_state, font, glyphs, maple_ft0_data);
+  }
+
+  *reinterpret_cast<ta_global_parameter::end_of_list *>(store_queue) =
+    ta_global_parameter::end_of_list(para_control::para_type::end_of_list);
+  sq_transfer_32byte(ta_fifo_polygon_converter);
 }
 
 void vbr600()
@@ -253,6 +315,8 @@ void vbr600()
   serial::string("istnrm ");
   serial::integer<uint32_t>(system.ISTNRM & system.IML6NRM);
   */
+
+  do_get_condition();
 
   render();
 
@@ -271,6 +335,12 @@ void vbr400()
 void vbr100()
 {
   serial::string("vbr100\n");
+  serial::string("expevt ");
+  serial::integer<uint16_t>(sh7091.CCN.EXPEVT);
+  serial::string("intevt ");
+  serial::integer<uint16_t>(sh7091.CCN.INTEVT);
+  serial::string("tra ");
+  serial::integer<uint16_t>(sh7091.CCN.TRA);
   while (1);
 }
 
@@ -353,8 +423,6 @@ int main()
 
   copy_font(texture, font->max_z_curve_ix);
   palette_data<256>();
-
-  struct runner_state runner_state = {0};
 
   video_output::set_mode_vga();
 

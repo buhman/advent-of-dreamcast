@@ -88,7 +88,7 @@ int parse_input(const char * input, int length, struct instruction * ins)
   return i;
 }
 
-int day3_part1(char * input, int length)
+int day3_part1(const char * input, int length)
 {
   struct instruction ins[1000];
 
@@ -103,7 +103,7 @@ int day3_part1(char * input, int length)
   return sum;
 }
 
-int day3_part2(char * input, int length)
+int day3_part2(const char * input, int length)
 {
   struct instruction ins[1000];
 

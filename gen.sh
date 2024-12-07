@@ -13,12 +13,12 @@ if [ ! -z "$day" ]; then
 
     mkdir -p day${day}
     cat <<EOF > day${day}/solution.c
-int day${day}_part1(char * input, int length)
+int day${day}_part1(const char * input, int length)
 {
   return -1;
 }
 
-int day${day}_part2(char * input, int length)
+int day${day}_part2(const char * input, int length)
 {
   return -1;
 }
@@ -87,18 +87,33 @@ for i in day* ; do
         echo "	${i}/sample2.txt.o \\" >> solutions.mk
     fi
     echo "	${i}/input.txt.o \\" >> solutions.mk
+    if [ -f ${i}/render.cpp ]; then
+        echo "	${i}/render.o \\" >> solutions.mk
+    fi
     echo -n "	${i}/solution.o" >> solutions.mk
 done
 echo >> solutions.mk
 
 truncate -s0 runner.inc
 for i in day* ; do
-    echo "int ${i}_part1(char * input, int length);" >> runner.inc
-    echo "int ${i}_part2(char * input, int length);" >> runner.inc
+    echo "int ${i}_part1(const char * input, int length);" >> runner.inc
+    echo "int ${i}_part2(const char * input, int length);" >> runner.inc
+    if [ -f ${i}/render.cpp ]; then
+        echo "void ${i}_render(const struct font * font," >> runner.inc
+        echo "                 const struct glyph * glyphs," >> runner.inc
+        echo "                 const void * maple_ft0_data);" >> runner.inc
+    fi
 done
 echo >> runner.inc
-echo "part_func solution[][2] = {" >> runner.inc
+echo "struct day_funcs solution[] = {" >> runner.inc
 for i in day* ; do
-    echo "  {${i}_part1, ${i}_part2}," >> runner.inc
+    echo "  {" >> runner.inc
+    echo "    {${i}_part1, ${i}_part2}," >> runner.inc
+    if [ -f ${i}/render.cpp ]; then
+        echo "    ${i}_render," >> runner.inc
+    else
+        echo "    NULL," >> runner.inc
+    fi
+    echo "  }," >> runner.inc
 done
 echo "};" >> runner.inc

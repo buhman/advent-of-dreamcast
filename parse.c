@@ -54,3 +54,28 @@ const char * parse_match(const char * s, const char * m)
   }
   return s;
 }
+
+int parse_stride(const char * s, int length)
+{
+  for (int i = 0; i < length; i++) {
+    if (s[i] == '\n') {
+      return i + 1;
+    }
+  }
+  return -1;
+}
+
+int parse_height(const char * s, int length)
+{
+  int rows = 0;
+  int i;
+  for (i = 0; i < length; i++) {
+    if (s[i] == '\n') {
+      rows += 1;
+    }
+  }
+  if (s[i-1] != '\n') {
+    rows += 1;
+  }
+  return rows;
+}

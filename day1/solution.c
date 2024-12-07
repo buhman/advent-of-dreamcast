@@ -23,7 +23,7 @@ static int parse_input(const char * input, int length, struct list * list)
   return i;
 }
 
-int day1_part1(char * input, int length)
+int day1_part1(const char * input, int length)
 {
   struct list list;
   int list_length = parse_input(input, length, &list);
@@ -40,7 +40,7 @@ int day1_part1(char * input, int length)
   return sum;
 }
 
-int day1_part2(char * input, int length)
+int day1_part2(const char * input, int length)
 {
   struct list list;
   int list_length = parse_input(input, length, &list);

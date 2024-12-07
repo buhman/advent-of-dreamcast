@@ -1,31 +1,7 @@
 #include <stdbool.h>
 
 #include "printf.h"
-
-static int parse_stride(char * input, int length)
-{
-  for (int i = 0; i < length; i++) {
-    if (input[i] == '\n') {
-      return i + 1;
-    }
-  }
-  return -1;
-}
-
-static int parse_height(char * input, int length)
-{
-  int rows = 0;
-  int i;
-  for (i = 0; i < length; i++) {
-    if (input[i] == '\n') {
-      rows += 1;
-    }
-  }
-  if (input[i-1] != '\n') {
-    rows += 1;
-  }
-  return rows;
-}
+#include "parse.h"
 
 enum offset_type {
   N,
@@ -61,7 +37,7 @@ static bool xy_inside(int width, int height,
   return true;
 }
 
-static char get_char(char * input,
+static char get_char(const char * input,
                      int stride,
                      int x, int y)
 {
@@ -69,7 +45,7 @@ static char get_char(char * input,
   return input[ix];
 }
 
-static bool offset_match(char * input,
+static bool offset_match(const char * input,
                          int stride,
                          int width, int height,
                          int x, int y,
@@ -92,7 +68,7 @@ static bool offset_match(char * input,
   return true;
 }
 
-static bool offset_match_centered(char * input,
+static bool offset_match_centered(const char * input,
                                   int stride,
                                   int width, int height,
                                   int x, int y,
@@ -117,7 +93,7 @@ static bool offset_match_centered(char * input,
                       str_length);
 }
 
-static bool offset_match_cross(char * input,
+static bool offset_match_cross(const char * input,
                                int stride,
                                int width, int height,
                                int x, int y,
@@ -155,7 +131,7 @@ static bool offset_match_cross(char * input,
   return match1 || match2;
 }
 
-int day4_part1(char * input, int length)
+int day4_part1(const char * input, int length)
 {
   int stride = parse_stride(input, length);
   int height = parse_height(input, length);
@@ -183,7 +159,7 @@ int day4_part1(char * input, int length)
   return match_count;
 }
 
-int day4_part2(char * input, int length)
+int day4_part2(const char * input, int length)
 {
   int stride = parse_stride(input, length);
   int height = parse_height(input, length);

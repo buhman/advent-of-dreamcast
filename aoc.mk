@@ -14,7 +14,8 @@ DREAMCAST_OBJ = \
 	$(LIB)/holly/ta_fifo_polygon_converter.o \
 	$(LIB)/holly/video_output.o \
 	$(LIB)/font/dejavusansmono/dejavusansmono.data.o \
-	$(LIB)/sh7091/serial.o
+	$(LIB)/sh7091/serial.o \
+	$(LIB)/maple/maple.o
 
 include solutions.mk
 
