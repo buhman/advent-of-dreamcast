@@ -15,12 +15,12 @@ if [ ! -z "$day" ]; then
     cat <<EOF > day${day}/solution.c
 #include <stdint.h>
 
-int day${day}_part1(const char * input, int length)
+int64_t day${day}_part1(const char * input, int length)
 {
   return -1;
 }
 
-int day${day}_part2(const char * input, int length)
+int64_t day${day}_part2(const char * input, int length)
 {
   return -1;
 }

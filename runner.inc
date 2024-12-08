@@ -15,6 +15,8 @@ void day6_render(const struct font * font,
                  const void * maple_ft0_data);
 int64_t day7_part1(const char * input, int length);
 int64_t day7_part2(const char * input, int length);
+int64_t day8_part1(const char * input, int length);
+int64_t day8_part2(const char * input, int length);
 
 struct day_funcs solution[] = {
   {
@@ -43,6 +45,10 @@ struct day_funcs solution[] = {
   },
   {
     {day7_part1, day7_part2},
+    NULL,
+  },
+  {
+    {day8_part1, day8_part2},
     NULL,
   },
 };

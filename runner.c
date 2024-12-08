@@ -18,16 +18,19 @@ struct day_funcs {
 
 #include "runner.inc"
 const int solution_days = (sizeof (solution)) / (sizeof (solution[0]));
+const int solution_ticks = solution_days * 2;
 
 bool runner_tick(struct runner_state * runner_state)
 {
-  int part = runner_state->tick % 2;
-  int day = runner_state->tick / 2;
+  int tick = (solution_ticks - 1) - runner_state->tick;
 
-  if (day >= solution_days) {
+  if (tick < 0) {
     runner_state->want_render = false;
     return true;
   }
+
+  int part = tick % 2;
+  int day = tick / 2;
 
   runner_state->want_render = solution[day].render != NULL;
 

@@ -10,6 +10,8 @@ void _printf(const char * format, ...);
 #define printf(...) _printf(__VA_ARGS__)
 #endif
 
+void print_char(char c);
+
 struct output_buffer {
   int buf_ix;
   char buf[16 * 1024];

@@ -11,6 +11,7 @@ enum format_type {
   FORMAT_BASE10_64,
   FORMAT_BASE16,
   FORMAT_STRING,
+  FORMAT_CHAR,
   FORMAT_PERCENT,
 };
 
@@ -47,6 +48,9 @@ static const char * parse_escape(const char * format, struct format * ft)
     return format + 1;
   case 's':
     ft->type = FORMAT_STRING;
+    return format + 1;
+  case 'c':
+    ft->type = FORMAT_CHAR;
     return format + 1;
   case '%':
     ft->type = FORMAT_PERCENT;
@@ -103,6 +107,12 @@ void _printf(const char * format, ...)
             while (*s != 0) {
               global_output_buffer.buf[global_output_buffer.buf_ix++] = *s++;
             }
+          }
+          break;
+        case FORMAT_CHAR:
+          {
+            const int c = va_arg(args, const int);
+            global_output_buffer.buf[global_output_buffer.buf_ix++] = (char)c;
           }
           break;
         case FORMAT_PERCENT:

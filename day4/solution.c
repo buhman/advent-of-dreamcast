@@ -3,6 +3,7 @@
 
 #include "printf.h"
 #include "parse.h"
+#include "cartesian.h"
 
 enum offset_type {
   N,
@@ -26,18 +27,6 @@ static char offsets[][2] = {
   [SE] = { 1,  1},
 };
 
-static bool xy_inside(int width, int height,
-                      int x, int y)
-{
-  if (y < 0 || x < 0)
-    return false;
-  if (x >= width)
-    return false;
-  if (y >= height)
-    return false;
-  return true;
-}
-
 static char get_char(const char * input,
                      int stride,
                      int x, int y)
@@ -55,7 +44,7 @@ static bool offset_match(const char * input,
                          int str_length)
 {
   for (int i = 0; i < str_length; i++) {
-    if (!xy_inside(width, height, x, y))
+    if (!cartesian_inside(width, height, x, y))
       return false;
 
     char c = get_char(input, stride, x, y);

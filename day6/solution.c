@@ -4,6 +4,7 @@
 
 #include "printf.h"
 #include "parse.h"
+#include "cartesian.h"
 
 #include "solution.h"
 
@@ -26,22 +27,12 @@ static struct position find_guard(const char * input, int length,
   return (struct position){x, y};
 }
 
-static bool position_inside_map(int width, int height,
-                                int x, int y)
-{
-  return
-    x >= 0     &&
-    y >= 0     &&
-    x < width  &&
-    y < height ;
-}
-
 static bool position_contains_obstacle(const char * input,
                                        int stride,
                                        int width, int height,
                                        int x, int y)
 {
-  if (!position_inside_map(width, height, x, y))
+  if (!cartesian_inside(width, height, x, y))
     return false;
 
   char c = input[y * stride + x];
@@ -151,8 +142,8 @@ int64_t day6_part1(const char * input, int length)
     day6_state.step = false;
     */
 
-    bool guard_inside_map = position_inside_map(width, height,
-                                                guard.position.x, guard.position.y);
+    bool guard_inside_map = cartesian_inside(width, height,
+                                             guard.position.x, guard.position.y);
     if (!guard_inside_map)
       break;
 
@@ -183,8 +174,8 @@ static bool speculative_obstacle_causes_loop(const char * input,
   guard.position = origin;
 
   while (true) {
-    bool guard_inside_map = position_inside_map(width, height,
-                                                guard.position.x, guard.position.y);
+    bool guard_inside_map = cartesian_inside(width, height,
+                                             guard.position.x, guard.position.y);
     if (!guard_inside_map)
       break;
 
@@ -227,8 +218,8 @@ int64_t day6_part2(const char * input, int length)
   for (int i = 0; i < width * height; i++) loops[i] = 0;
 
   while (true) {
-    bool guard_inside_map = position_inside_map(width, height,
-                                                guard.position.x, guard.position.y);
+    bool guard_inside_map = cartesian_inside(width, height,
+                                             guard.position.x, guard.position.y);
     if (!guard_inside_map)
       break;
 

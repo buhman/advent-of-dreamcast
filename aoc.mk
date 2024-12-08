@@ -3,7 +3,9 @@ OBJ = \
 	heapsort.o \
 	printf.o \
 	runner.o \
-	unparse.o
+	unparse.o \
+	cartesian.o \
+	array.o
 
 DREAMCAST_OBJ = \
 	runner_dreamcast.o \
