@@ -5,7 +5,8 @@ OBJ = \
 	runner.o \
 	unparse.o \
 	cartesian.o \
-	array.o
+	array.o \
+	memory.o
 
 DREAMCAST_OBJ = \
 	runner_dreamcast.o \

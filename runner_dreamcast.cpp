@@ -433,6 +433,7 @@ int main()
 
   uint32_t done_frame = 0;
   bool done = false;
+  //int last_state = -1;
   while (true) {
     if (!done && runner_tick(&runner_state)) {
       done = true;
@@ -440,8 +441,17 @@ int main()
     }
     if (done && (frame == done_frame + 3))
       break;
+    /*
+    if (runner_state.tick != last_state) {
+      last_state = runner_state.tick;
+      serial::integer<uint32_t>(runner_state.tick);
+    }
+    */
   }
 
+  serial::string("return\n");
+  serial::string("return\n");
+  serial::string("return\n");
   serial::string("return\n");
 }
 

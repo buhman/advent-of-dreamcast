@@ -11,7 +11,18 @@ const char * parse_skip(const char * s, char c)
   return s;
 }
 
-static int base10_digit(char c)
+const char * parse_find_first_right(const char * s, int length, char c)
+{
+  const char * ss = &s[length - 1];
+  while (ss >= s) {
+    if (*ss == c)
+      return ss;
+    ss--;
+  }
+  return s;
+}
+
+int parse_base10_digit(char c)
 {
   switch (c) {
   case '0': return 0;
@@ -33,7 +44,7 @@ const char * parse_base10(const char * s, int * n)
   *n = 0;
 
   while (true) {
-    int digit = base10_digit(*s);
+    int digit = parse_base10_digit(*s);
     if (digit == -1)
       break;
 
@@ -50,7 +61,7 @@ const char * parse_base10_64(const char * s, int64_t * n)
   *n = 0;
 
   while (true) {
-    int digit = base10_digit(*s);
+    int digit = parse_base10_digit(*s);
     if (digit == -1)
       break;
 
