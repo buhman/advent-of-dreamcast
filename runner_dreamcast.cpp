@@ -454,11 +454,3 @@ int main()
   serial::string("return\n");
   serial::string("return\n");
 }
-
-
-extern "C"
-void print_char(char c)
-{
-  global_output_buffer.buf[global_output_buffer.buf_ix++] = c;
-  serial::character(c);
-}

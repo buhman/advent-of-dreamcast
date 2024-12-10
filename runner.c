@@ -32,7 +32,7 @@ bool runner_tick(struct runner_state * runner_state)
   int part = tick % 2;
   int day = tick / 2;
 
-  if (day < 8)
+  if (day < 9)
     return true;
 
   runner_state->want_render = solution[day].render != NULL;

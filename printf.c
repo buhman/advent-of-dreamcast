@@ -5,6 +5,7 @@
 #include "parse.h"
 #include "unparse.h"
 #include "printf.h"
+#include "sh7091_scif.h"
 
 enum format_type {
   FORMAT_BASE10,
@@ -62,6 +63,19 @@ static const char * parse_escape(const char * format, struct format * ft)
 
 struct output_buffer global_output_buffer = {0};
 
+void print_char(char c)
+{
+  global_output_buffer.buf[global_output_buffer.buf_ix++] = c;
+  scif_character(c);
+}
+
+static void __print_s(const char * s, int length)
+{
+  for (int i = 0; i < length; i++) {
+    scif_character(s[i]);
+  }
+}
+
 void _printf(const char * format, ...)
 {
   va_list args;
@@ -82,6 +96,7 @@ void _printf(const char * format, ...)
             int32_t num = va_arg(args, int32_t);
             char * s = &global_output_buffer.buf[global_output_buffer.buf_ix];
             int offset = unparse_base10(s, num, ft.pad_length, ft.fill_char);
+            __print_s(s, offset);
             global_output_buffer.buf_ix += offset;
           }
           break;
@@ -90,6 +105,7 @@ void _printf(const char * format, ...)
             int64_t num = va_arg(args, int64_t);
             char * s = &global_output_buffer.buf[global_output_buffer.buf_ix];
             int offset = unparse_base10_64(s, num, ft.pad_length, ft.fill_char);
+            __print_s(s, offset);
             global_output_buffer.buf_ix += offset;
           }
           break;
@@ -98,6 +114,7 @@ void _printf(const char * format, ...)
             uint32_t num = va_arg(args, uint32_t);
             char * s = &global_output_buffer.buf[global_output_buffer.buf_ix];
             int offset = unparse_base16(s, num, ft.pad_length, ft.fill_char);
+            __print_s(s, offset);
             global_output_buffer.buf_ix += offset;
           }
           break;
@@ -105,24 +122,32 @@ void _printf(const char * format, ...)
           {
             const char * s = va_arg(args, const char *);
             while (*s != 0) {
-              global_output_buffer.buf[global_output_buffer.buf_ix++] = *s++;
+              char c = *s++;
+              scif_character(c);
+              global_output_buffer.buf[global_output_buffer.buf_ix++] = c;
             }
           }
           break;
         case FORMAT_CHAR:
           {
             const int c = va_arg(args, const int);
+            scif_character((char)c);
             global_output_buffer.buf[global_output_buffer.buf_ix++] = (char)c;
           }
           break;
         case FORMAT_PERCENT:
+          scif_character('%');
           global_output_buffer.buf[global_output_buffer.buf_ix++] = '%';
           break;
         }
       }
       break;
     default:
-      global_output_buffer.buf[global_output_buffer.buf_ix++] = *format++;
+      {
+        char c = *format++;
+        scif_character(c);
+        global_output_buffer.buf[global_output_buffer.buf_ix++] = c;
+      }
       break;
     }
   }

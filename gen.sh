@@ -42,7 +42,7 @@ function gen_start_size ()
 }
 
 
-for i in day* ; do
+for i in day? day?? ; do
     make ${i}/sample1.txt.h ${i}/input.txt.h
     if [ -f ${i}/sample2.txt ]; then
         make ${i}/sample2.txt.h
@@ -52,7 +52,7 @@ done
 
 truncate -s0 input_dreamcast.inc
 
-for i in day* ; do
+for i in day? day?? ; do
     echo "#include \"${i}/sample1.txt.h\"" >> input_dreamcast.inc
     if [ -f ${i}/sample2.txt ]; then
         echo "#include \"${i}/sample2.txt.h\"" >> input_dreamcast.inc
@@ -61,7 +61,7 @@ for i in day* ; do
 done
 echo >> input_dreamcast.inc
 echo "static struct start_size sample[][2] = {" >> input_dreamcast.inc
-for i in day* ; do
+for i in day? day?? ; do
     echo "  {"  >> input_dreamcast.inc
     gen_start_size "  " "${i}" "sample1"
     if [ ! -f ${i}/sample2.txt ]; then
@@ -74,7 +74,7 @@ done
 echo "};" >> input_dreamcast.inc
 echo >> input_dreamcast.inc
 echo "static struct start_size input[] = {" >> input_dreamcast.inc
-for i in day* ; do
+for i in day? day?? ; do
     gen_start_size "" "${i}" "input"
 done
 echo "};" >> input_dreamcast.inc
@@ -82,7 +82,7 @@ echo "};" >> input_dreamcast.inc
 
 truncate -s0 solutions.mk
 echo -n "DAY_OBJ =" >> solutions.mk
-for i in day* ; do
+for i in day? day?? ; do
     echo " \\" >> solutions.mk
     echo "	${i}/sample1.txt.o \\" >> solutions.mk
     if [ -f ${i}/sample2.txt ]; then
@@ -97,7 +97,7 @@ done
 echo >> solutions.mk
 
 truncate -s0 runner.inc
-for i in day* ; do
+for i in day? day?? ; do
     echo "int64_t ${i}_part1(const char * input, int length);" >> runner.inc
     echo "int64_t ${i}_part2(const char * input, int length);" >> runner.inc
     if [ -f ${i}/render.cpp ]; then
@@ -108,7 +108,7 @@ for i in day* ; do
 done
 echo >> runner.inc
 echo "struct day_funcs solution[] = {" >> runner.inc
-for i in day* ; do
+for i in day? day?? ; do
     echo "  {" >> runner.inc
     echo "    {${i}_part1, ${i}_part2}," >> runner.inc
     if [ -f ${i}/render.cpp ]; then

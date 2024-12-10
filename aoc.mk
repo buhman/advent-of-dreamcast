@@ -11,6 +11,7 @@ OBJ = \
 DREAMCAST_OBJ = \
 	runner_dreamcast.o \
 	input_dreamcast.o \
+	sh7091_scif.o \
 	$(LIB)/holly/core.o \
 	$(LIB)/holly/region_array.o \
 	$(LIB)/holly/background.o \
