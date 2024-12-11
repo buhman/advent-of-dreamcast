@@ -20,6 +20,10 @@ DREAMCAST_OBJ = \
 	$(LIB)/font/dejavusansmono/dejavusansmono.data.o \
 	$(LIB)/sh7091/serial.o \
 	$(LIB)/maple/maple.o
+#	libgcc/_divdi3.o \
+#	libgcc/_moddi3.o \
+#	libgcc/_udiv_qrnnd_16.o \
+#	libgcc/_clz.o
 
 include solutions.mk
 

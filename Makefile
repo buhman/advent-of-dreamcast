@@ -1,6 +1,6 @@
 all: $(patsubst %.cpp,%.elf,$(wildcard example/*.cpp))
 
-OPT = -Og
+OPT = -O3
 
 include dreamcast/base.mk
 include dreamcast/common.mk

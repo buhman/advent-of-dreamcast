@@ -21,6 +21,8 @@ int64_t day9_part1(const char * input, int length);
 int64_t day9_part2(const char * input, int length);
 int64_t day10_part1(const char * input, int length);
 int64_t day10_part2(const char * input, int length);
+int64_t day11_part1(const char * input, int length);
+int64_t day11_part2(const char * input, int length);
 
 struct day_funcs solution[] = {
   {
@@ -61,6 +63,10 @@ struct day_funcs solution[] = {
   },
   {
     {day10_part1, day10_part2},
+    NULL,
+  },
+  {
+    {day11_part1, day11_part2},
     NULL,
   },
 };
