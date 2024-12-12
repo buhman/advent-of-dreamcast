@@ -12,24 +12,24 @@ struct start_size {
 
 const int input_size = (sizeof (input)) / (sizeof (input[0]));
 
-void open_input(int day, char ** buf, int * length)
+void open_input(int ix, char ** buf, int * length)
 {
-  if (day < 1 || day > input_size) {
+  if (ix < 0 || ix >= input_size) {
     *buf = NULL;
     *length = 0;
   } else {
-    *buf    = input[day - 1].start;
-    *length = input[day - 1].size;
+    *buf    = input[ix].start;
+    *length = input[ix].size;
   }
 }
 
-void open_sample(int day, int part, char ** buf, int * length)
+void open_sample(int ix, int part, char ** buf, int * length)
 {
-  if (day < 1 || day > input_size || part < 1 || part > 2) {
+  if (ix < 1 || ix > input_size || part < 0 || part > 1) {
     *buf = NULL;
     *length = 0;
   } else {
-    *buf    = sample[day - 1][part - 1].start;
-    *length = sample[day - 1][part - 1].size;
+    *buf    = sample[ix][part].start;
+    *length = sample[ix][part].size;
   }
 }

@@ -12,4 +12,12 @@ CFLAGS += -I$(MAKEFILE_PATH)/dreamcast/
 CFLAGS += -Wno-char-subscripts
 LIB ?= $(MAKEFILE_PATH)/dreamcast
 
+libgcc/%.o: $(LIBGCC)
+	ar x --output $(dir $@) $(LIBGCC) $(notdir $@)
+	sh4-none-elf-objdump -t $@ \
+		| grep -E '[.]hidden' \
+		| grep -vE 'UND' \
+		| cut -d' ' -f10 \
+		| xargs rebind --visibility=default $@
+
 include aoc.mk
