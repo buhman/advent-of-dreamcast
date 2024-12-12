@@ -5,7 +5,7 @@ set -ex
 year="$1"
 day="$2"
 
-if [ ! -z $year && ! -z "$year/$day" ]; then
+if [ ! -z $year ]; then
     re='^[0-9]+$'
     if ! [[ $year =~ $re ]] ; then
         echo "error: $year: not a number" >&2
@@ -20,12 +20,12 @@ if [ ! -z $year && ! -z "$year/$day" ]; then
     cat <<EOF > ${year}/day${day}/solution.c
 #include <stdint.h>
 
-int64_t ${year}_day${day}_part1(const char * input, int length)
+int64_t _${year}_day${day}_part1(const char * input, int length)
 {
   return -1;
 }
 
-int64_t ${year}_day${day}_part2(const char * input, int length)
+int64_t _${year}_day${day}_part2(const char * input, int length)
 {
   return -1;
 }

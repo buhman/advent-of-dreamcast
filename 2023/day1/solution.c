@@ -59,7 +59,7 @@ static int parse_digit_right(const char * start, const char * end, digit_parser_
   return -1;
 }
 
-int solve(const char * input, int length, digit_parser_t parser)
+static int solve(const char * input, int length, digit_parser_t parser)
 {
   const char * end = input + length;
 

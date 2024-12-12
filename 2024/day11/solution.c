@@ -147,7 +147,7 @@ static int parse_input(const char * input, int length,
 
 static int64_t solve(const char * input, int length, int max_depth)
 {
-  static struct cache cache;
+  struct cache cache;
   int64_t stones[20];
 
   int count = parse_input(input, length, stones);
