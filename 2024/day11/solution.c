@@ -63,16 +63,6 @@ static void sift_up(struct entry * e, int ix)
 static int search(struct entry * e, int length, int ix, int64_t n, int32_t depth)
 {
   if (e[ix].depth == depth && e[ix].n == n) {
-    /*
-    uint32_t r15;
-    asm volatile ("mov r15,%0"
-                  : "=r" (r15));
-    if (r15 < min) {
-      //printf("%08x\n", r15);
-      min = r15;
-    }
-    */
-
     return ix;
   }
 

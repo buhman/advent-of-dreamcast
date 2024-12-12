@@ -6,7 +6,8 @@ OBJ = \
 	unparse.o \
 	cartesian.o \
 	array.o \
-	memory.o
+	memory.o \
+	heap.o
 
 DREAMCAST_OBJ = \
 	runner_dreamcast.o \
@@ -23,7 +24,8 @@ DREAMCAST_OBJ = \
 	libgcc/_divdi3.o \
 	libgcc/_moddi3.o \
 	libgcc/_udiv_qrnnd_16.o \
-	libgcc/_clz.o
+	libgcc/_clz.o \
+	libgcc/_div_table.o
 
 include solutions.mk
 
