@@ -3,25 +3,6 @@
 
 #include "parse.h"
 
-const char * parse_skip(const char * s, char c)
-{
-  while (*s == c) {
-    s++;
-  }
-  return s;
-}
-
-const char * parse_find_first_right(const char * s, int length, char c)
-{
-  const char * ss = &s[length - 1];
-  while (ss >= s) {
-    if (*ss == c)
-      return ss;
-    ss--;
-  }
-  return s;
-}
-
 int parse_base10_digit(char c)
 {
   switch (c) {
@@ -37,6 +18,33 @@ int parse_base10_digit(char c)
   case '9': return 9;
   default: return -1;
   }
+}
+
+const char * parse_skip(const char * s, char c)
+{
+  while (*s == c) {
+    s++;
+  }
+  return s;
+}
+
+const char * parse_find(const char * s, char c)
+{
+  while (*s != c) {
+    s++;
+  }
+  return s;
+}
+
+const char * parse_find_first_right(const char * s, int length, char c)
+{
+  const char * ss = &s[length - 1];
+  while (ss >= s) {
+    if (*ss == c)
+      return ss;
+    ss--;
+  }
+  return s;
 }
 
 const char * parse_base10(const char * s, int * n)

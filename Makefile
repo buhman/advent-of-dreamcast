@@ -13,6 +13,7 @@ CFLAGS += -Wno-char-subscripts
 LIB ?= $(MAKEFILE_PATH)/dreamcast
 
 libgcc/%.o: $(LIBGCC)
+	@mkdir -p $(dir $@)
 	ar x --output $(dir $@) $(LIBGCC) $(notdir $@)
 	sh4-none-elf-objdump -t $@ \
 		| grep -E '[.]hidden' \

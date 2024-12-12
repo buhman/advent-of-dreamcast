@@ -26,6 +26,7 @@ bool runner_tick(struct runner_state * runner_state)
 {
   int tick = (solution_ticks - 1) - runner_state->tick;
   //int tick = runner_state->tick;
+  runner_state->tick += 1;
 
   if (tick < 0) {
     runner_state->want_render = false;
@@ -37,17 +38,19 @@ bool runner_tick(struct runner_state * runner_state)
   int year = solution[ix].year;
   int day = solution[ix].day;
 
+  if (year != 2023) {
+    return false;
+  }
+
   runner_state->want_render = solution[ix].render != NULL;
 
   char * buf;
   int length;
-  open_sample(ix, part, &buf, &length);
-  //open_input(ix, &buf, &length);
-  int64_t answer = solution[day].part[part](buf, length);
+  //open_sample(ix, part, &buf, &length);
+  open_input(ix, &buf, &length);
+  int64_t answer = solution[ix].part[part](buf, length);
 
   printf("%d day %d part %d: %l\n", year, day, part + 1, answer);
-
-  runner_state->tick += 1;
 
   return false;
 }

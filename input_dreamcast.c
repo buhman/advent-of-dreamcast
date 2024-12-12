@@ -25,7 +25,7 @@ void open_input(int ix, char ** buf, int * length)
 
 void open_sample(int ix, int part, char ** buf, int * length)
 {
-  if (ix < 1 || ix > input_size || part < 0 || part > 1) {
+  if (ix < 0 || ix > input_size || part < 0 || part > 1) {
     *buf = NULL;
     *length = 0;
   } else {
