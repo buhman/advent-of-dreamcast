@@ -25,6 +25,8 @@ int64_t _2024_day8_part1(const char * input, int length);
 int64_t _2024_day8_part2(const char * input, int length);
 int64_t _2024_day9_part1(const char * input, int length);
 int64_t _2024_day9_part2(const char * input, int length);
+int64_t _2023_day24_part1(const char * input, int length);
+int64_t _2023_day24_part2(const char * input, int length);
 int64_t _2024_day10_part1(const char * input, int length);
 int64_t _2024_day10_part2(const char * input, int length);
 int64_t _2024_day11_part1(const char * input, int length);
@@ -91,6 +93,11 @@ struct day_funcs solution[] = {
   {
     2024, 9,
     {_2024_day9_part1, _2024_day9_part2},
+    NULL,
+  },
+  {
+    2023, 24,
+    {_2023_day24_part1, _2023_day24_part2},
     NULL,
   },
   {

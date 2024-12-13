@@ -24,6 +24,8 @@
 #include "2024/day8/input.txt.h"
 #include "2024/day9/sample1.txt.h"
 #include "2024/day9/input.txt.h"
+#include "2023/day24/sample1.txt.h"
+#include "2023/day24/input.txt.h"
 #include "2024/day10/sample1.txt.h"
 #include "2024/day10/input.txt.h"
 #include "2024/day11/sample1.txt.h"
@@ -106,6 +108,12 @@ static struct start_size sample[][2] = {
       (uint32_t)&_binary_2024_day9_sample1_txt_size   },
   },
   {
+    { (  char *)&_binary_2023_day24_sample1_txt_start,
+      (uint32_t)&_binary_2023_day24_sample1_txt_size   },
+    { (  char *)&_binary_2023_day24_sample1_txt_start,
+      (uint32_t)&_binary_2023_day24_sample1_txt_size   },
+  },
+  {
     { (  char *)&_binary_2024_day10_sample1_txt_start,
       (uint32_t)&_binary_2024_day10_sample1_txt_size   },
     { (  char *)&_binary_2024_day10_sample1_txt_start,
@@ -150,6 +158,8 @@ static struct start_size input[] = {
     (uint32_t)&_binary_2024_day8_input_txt_size   },
   { (  char *)&_binary_2024_day9_input_txt_start,
     (uint32_t)&_binary_2024_day9_input_txt_size   },
+  { (  char *)&_binary_2023_day24_input_txt_start,
+    (uint32_t)&_binary_2023_day24_input_txt_size   },
   { (  char *)&_binary_2024_day10_input_txt_start,
     (uint32_t)&_binary_2024_day10_input_txt_size   },
   { (  char *)&_binary_2024_day11_input_txt_start,

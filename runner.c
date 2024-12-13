@@ -38,7 +38,7 @@ bool runner_tick(struct runner_state * runner_state)
   int year = solution[ix].year;
   int day = solution[ix].day;
 
-  if (year != 2023 || day != 3) {
+  if (year != 2023 || day != 24) {
     return false;
   }
 

@@ -50,6 +50,12 @@ const char * parse_find_first_right(const char * s, int length, char c)
 const char * parse_base10(const char * s, int * n)
 {
   *n = 0;
+  int sign = 1;
+
+  if (*s == '-') {
+    sign = -1;
+    s++;
+  }
 
   while (true) {
     int digit = parse_base10_digit(*s);
@@ -60,6 +66,8 @@ const char * parse_base10(const char * s, int * n)
     *n += digit;
     s++;
   }
+
+  *n *= sign;
 
   return s;
 }
@@ -67,6 +75,12 @@ const char * parse_base10(const char * s, int * n)
 const char * parse_base10_64(const char * s, int64_t * n)
 {
   *n = 0;
+  int sign = 1;
+
+  if (*s == '-') {
+    sign = -1;
+    s++;
+  }
 
   while (true) {
     int digit = parse_base10_digit(*s);
@@ -77,6 +91,8 @@ const char * parse_base10_64(const char * s, int64_t * n)
     *n += digit;
     s++;
   }
+
+  *n *= sign;
 
   return s;
 }

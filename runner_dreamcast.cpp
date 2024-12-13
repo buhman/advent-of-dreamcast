@@ -316,12 +316,28 @@ void vbr600()
   serial::integer<uint32_t>(system.ISTNRM & system.IML6NRM);
   */
 
+  // set single precision mode
+  uint32_t single_precision = 0;
+  asm volatile
+    ("lds %0,fpscr;"
+     :
+     : "r" (single_precision)
+     : "memory");
+
   do_get_condition();
 
   render();
 
   // reset v_blank_in interrupt
   system.ISTNRM = istnrm::v_blank_in_interrupt;
+
+  // set double precision mode
+  uint32_t double_precision = sh::fpscr::pr;
+  asm volatile
+    ("lds %0,fpscr;"
+     :
+     : "r" (double_precision)
+     : "memory");
 
   return;
 }
@@ -430,6 +446,14 @@ int main()
   core = -2;
 
   interrupt_init();
+
+  // set double precision mode
+  uint32_t double_precision = sh::fpscr::pr;
+  asm volatile
+    ("lds %0,fpscr;"
+     :
+     : "r" (double_precision)
+     : "memory");
 
   uint32_t done_frame = 0;
   bool done = false;
