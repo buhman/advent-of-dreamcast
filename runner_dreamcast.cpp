@@ -105,7 +105,7 @@ const struct vertex strip_vertices[4] = {
 constexpr uint32_t strip_length = (sizeof (strip_vertices)) / (sizeof (struct vertex));
 
 
-void glyph_start(const uint32_t texture_width, uint32_t texture_height)
+void glyph_start(const uint32_t texture_width, const uint32_t texture_height)
 {
   const uint32_t parameter_control_word = para_control::para_type::polygon_or_modifier_volume
                                         | para_control::list_type::translucent
@@ -119,6 +119,7 @@ void glyph_start(const uint32_t texture_width, uint32_t texture_height)
                                       | tsp_instruction_word::dst_alpha_instr::one
                                       | tsp_instruction_word::fog_control::no_fog
                                       | tsp_instruction_word::use_alpha
+                                      | tsp_instruction_word::texture_shading_instruction::modulate
                                       | tsp_instruction_word::texture_u_size::from_int(texture_width)
                                       | tsp_instruction_word::texture_v_size::from_int(texture_height);
 
@@ -144,7 +145,8 @@ int32_t transform_char(const uint32_t texture_width,
                        const glyph * glyphs,
                        const char c,
                        int32_t horizontal_advance,
-                       int32_t vertical_advance)
+                       int32_t vertical_advance,
+                       uint32_t base_color = 0xffffffff)
 {
   auto& glyph = glyphs[c - first_char_code];
 
@@ -173,7 +175,7 @@ int32_t transform_char(const uint32_t texture_width,
       ta_vertex_parameter::polygon_type_3(polygon_vertex_parameter_control_word(end_of_strip),
                                           x, y, z,
                                           u, v,
-                                          0, // base_color
+                                          base_color, // base_color
                                           0  // offset_color
                                           );
     sq_transfer_32byte(ta_fifo_polygon_converter);

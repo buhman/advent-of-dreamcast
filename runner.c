@@ -38,11 +38,12 @@ bool runner_tick(struct runner_state * runner_state)
   int year = solution[ix].year;
   int day = solution[ix].day;
 
-  if (year != 2024 || day != 13) {
+  if (year != 2024 || day != 14) {
     return false;
   }
 
   runner_state->want_render = solution[ix].render != NULL;
+  //printf("want_render %d\n", runner_state->want_render);
 
   char * buf;
   int length;
@@ -60,12 +61,14 @@ void runner_render(struct runner_state * runner_state,
                    const struct glyph * glyphs,
                    const void * maple_ft0_data)
 {
-  int day = runner_state->tick / 2;
+  int tick = (solution_ticks - 1) - runner_state->tick;
+  int ix = tick / 2;
 
-  if (day >= solution_days) {
+  if (tick < 0) {
     return;
   }
-  if (solution[day].render != NULL) {
-    solution[day].render(font, glyphs, maple_ft0_data);
+
+  if (solution[ix].render != NULL) {
+    solution[ix].render(font, glyphs, maple_ft0_data);
   }
 }

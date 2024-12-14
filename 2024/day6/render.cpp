@@ -19,7 +19,8 @@ extern int32_t transform_char(const uint32_t texture_width,
                               const glyph * glyphs,
                               const char c,
                               int32_t horizontal_advance,
-                              int32_t vertical_advance);
+                              int32_t vertical_advance,
+                              uint32_t base_color = 0xffffffff);
 
 using vec2 = vec<2, float>;
 
@@ -36,7 +37,7 @@ constexpr vec2 square_vertices[] = {
   {0.525, 0.475},
 };
 
-vec2 rotate(vec2 v, int n) {
+static vec2 rotate(vec2 v, int n) {
   switch (n) {
   case 0: return {v.x, v.y};
   case 1: return {-v.y, v.x};
@@ -46,7 +47,7 @@ vec2 rotate(vec2 v, int n) {
   __builtin_unreachable();
 }
 
-void polygon_start()
+static void polygon_start()
 {
   const uint32_t parameter_control_word = para_control::para_type::polygon_or_modifier_volume
                                         | para_control::list_type::translucent
@@ -72,7 +73,7 @@ void polygon_start()
 
 constexpr int scale = 45;
 
-void arrow(int cx, int cy, int rotation, uint32_t base_color)
+static void arrow(int cx, int cy, int rotation, uint32_t base_color)
 {
   float z = 1.0 / 10.0;
 
@@ -95,7 +96,7 @@ void arrow(int cx, int cy, int rotation, uint32_t base_color)
   }
 }
 
-void border(int cx, int cy, int rotation)
+static void border(int cx, int cy, int rotation)
 {
   uint32_t base_color = 0xff'ff00ff;
   float z = 1.0 / 10.0;
@@ -119,10 +120,10 @@ void border(int cx, int cy, int rotation)
   }
 }
 
-void glyph(const struct font * font,
-           const struct glyph * glyphs,
-           int cx, int cy,
-           char c)
+static void glyph(const struct font * font,
+                  const struct glyph * glyphs,
+                  int cx, int cy,
+                  char c)
 {
   int32_t horizontal_advance = font->face_metrics.max_advance * 2 / 5; // 26.6 fixed point
   int32_t vertical_advance = font->face_metrics.height * 5 / 4; // 26.6 fixed point
@@ -144,7 +145,7 @@ void glyph(const struct font * font,
 
 extern "C" struct solution_state day6_state;
 
-void a_press()
+static void a_press()
 {
   serial::string("press\n");
   serial::integer<uint8_t>(day6_state.part);

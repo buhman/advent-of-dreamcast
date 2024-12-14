@@ -35,6 +35,8 @@
 #include "2024/day12/input.txt.h"
 #include "2024/day13/sample1.txt.h"
 #include "2024/day13/input.txt.h"
+#include "2024/day14/sample1.txt.h"
+#include "2024/day14/input.txt.h"
 
 static struct start_size sample[][2] = {
   {
@@ -139,6 +141,12 @@ static struct start_size sample[][2] = {
     { (  char *)&_binary_2024_day13_sample1_txt_start,
       (uint32_t)&_binary_2024_day13_sample1_txt_size   },
   },
+  {
+    { (  char *)&_binary_2024_day14_sample1_txt_start,
+      (uint32_t)&_binary_2024_day14_sample1_txt_size   },
+    { (  char *)&_binary_2024_day14_sample1_txt_start,
+      (uint32_t)&_binary_2024_day14_sample1_txt_size   },
+  },
 };
 
 static struct start_size input[] = {
@@ -176,4 +184,6 @@ static struct start_size input[] = {
     (uint32_t)&_binary_2024_day12_input_txt_size   },
   { (  char *)&_binary_2024_day13_input_txt_start,
     (uint32_t)&_binary_2024_day13_input_txt_size   },
+  { (  char *)&_binary_2024_day14_input_txt_start,
+    (uint32_t)&_binary_2024_day14_input_txt_size   },
 };

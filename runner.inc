@@ -35,6 +35,11 @@ int64_t _2024_day12_part1(const char * input, int length);
 int64_t _2024_day12_part2(const char * input, int length);
 int64_t _2024_day13_part1(const char * input, int length);
 int64_t _2024_day13_part2(const char * input, int length);
+int64_t _2024_day14_part1(const char * input, int length);
+int64_t _2024_day14_part2(const char * input, int length);
+void _2024_day14_render(const struct font * font,
+                   const struct glyph * glyphs,
+                   const void * maple_ft0_data);
 
 struct day_funcs solution[] = {
   {
@@ -121,5 +126,10 @@ struct day_funcs solution[] = {
     2024, 13,
     {_2024_day13_part1, _2024_day13_part2},
     NULL,
+  },
+  {
+    2024, 14,
+    {_2024_day14_part1, _2024_day14_part2},
+    _2024_day14_render,
   },
 };
