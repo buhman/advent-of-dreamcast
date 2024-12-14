@@ -1,12 +1,13 @@
 all: $(patsubst %.cpp,%.elf,$(wildcard example/*.cpp))
 
-OPT = -Og
+OPT = -O0
 
 MAKEFILE_PATH := $(patsubst %/,%,$(dir $(abspath $(firstword $(MAKEFILE_LIST)))))
 CFLAGS += -I$(MAKEFILE_PATH)
 CFLAGS += -I$(MAKEFILE_PATH)/dreamcast/
 CFLAGS += -Wno-char-subscripts
 LIB ?= $(MAKEFILE_PATH)/dreamcast
+
 CARCH = -m4 -ml
 
 include dreamcast/base.mk

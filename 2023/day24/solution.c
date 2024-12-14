@@ -3,6 +3,8 @@
 #include "parse.h"
 #include "printf.h"
 
+#include "double.h"
+
 struct vec3 {
   double x;
   double y;
@@ -48,14 +50,6 @@ static bool line_line_intersection_2d(vec3 * a, vec3 * da,
   return true;
 }
 
-static double int64_to_double(int64_t n)
-{
-  double l = (uint32_t)n;
-  double h = (int32_t)(n >> 32);
-
-  return h * 4294967296.0 + l;
-}
-
 static const char * parse_line(const char * input, vec3 * p, vec3 * v)
 {
   int64_t x, y, z;
@@ -81,12 +75,12 @@ static const char * parse_line(const char * input, vec3 * p, vec3 * v)
   input = parse_skip(input, ' ');
   input = parse_skip(input, '\n');
 
-  p->x = int64_to_double(x);
-  p->y = int64_to_double(y);
-  p->z = int64_to_double(z);
-  v->x = int64_to_double(dx);
-  v->y = int64_to_double(dy);
-  v->z = int64_to_double(dz);
+  p->x = (double)(x);
+  p->y = (double)(y);
+  p->z = (double)(z);
+  v->x = (double)(dx);
+  v->y = (double)(dy);
+  v->z = (double)(dz);
 
   return input;
 }
