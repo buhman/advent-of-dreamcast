@@ -15,3 +15,10 @@ void memory_set_int(int * buf, int c, int length)
     buf[i] = c;
   }
 }
+
+void memory_copy_char(char * src, int length, char * dst)
+{
+  for (int i = 0; i < length; i += 1) {
+    dst[i] = src[i];
+  }
+}

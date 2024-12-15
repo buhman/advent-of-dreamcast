@@ -86,7 +86,7 @@ static inline bool n_in_array(int * a, int length, int n)
   return false;
 }
 
-int solve(const char * input, int length, predicate_func pred, accumulate_func acc)
+static int solve(const char * input, int length, predicate_func pred, accumulate_func acc)
 {
   const char * end = input + length;
 
