@@ -9,6 +9,9 @@ DAY_OBJ = \
 	2023/day3/sample1.txt.o \
 	2023/day3/input.txt.o \
 	2023/day3/solution.o \
+	2023/day4/sample1.txt.o \
+	2023/day4/input.txt.o \
+	2023/day4/solution.o \
 	2024/day1/sample1.txt.o \
 	2024/day1/input.txt.o \
 	2024/day1/solution.o \
