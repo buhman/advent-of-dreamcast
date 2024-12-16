@@ -7,6 +7,7 @@ extern "C" {
 void memory_set_char(char * buf, char c, int length);
 void memory_set_int(int * buf, int c, int length);
 void memory_copy_char(char * src, int length, char * dst);
+void memory_copy_u32(void * _src, int length, void * _dst);
 
 #ifdef __cplusplus
 }

@@ -22,3 +22,14 @@ void memory_copy_char(char * src, int length, char * dst)
     dst[i] = src[i];
   }
 }
+
+void memory_copy_u32(void * _src, int length, void * _dst)
+{
+  // size given in bytes
+  uint32_t * src = _src;
+  uint32_t * dst = _dst;
+
+  for (int i = 0; i < length; i++) {
+    dst[i] = src[i];
+  }
+}
