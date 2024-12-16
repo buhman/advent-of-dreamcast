@@ -8,7 +8,8 @@ OBJ = \
 	array.o \
 	memory.o \
 	heap.o \
-	linear_algebra.o
+	linear_algebra.o \
+	dijkstra.o
 
 DREAMCAST_OBJ = \
 	runner_dreamcast.o \
