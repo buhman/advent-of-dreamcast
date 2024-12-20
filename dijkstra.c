@@ -2,10 +2,10 @@
 #include "dijkstra.h"
 #include "heap.h"
 #include "memory.h"
-//#include "printf.h"
+#include "printf.h"
 
-#include <stdio.h>
-#include <assert.h>
+//#include <stdio.h>
+//#include <assert.h>
 
 void dijkstra_cartesian(const char * graph,
                         int stride,

@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-#include <stdio.h>
-//#include "printf.h"
+//#include <stdio.h>
+#include "printf.h"
 #include "dijkstra.h"
 #include "memory.h"
 
@@ -95,6 +95,7 @@ int64_t _2024_day16_part2(const char * input, int length)
   return -1;
 }
 
+/*
 #include <assert.h>
 
 int main()
@@ -107,3 +108,4 @@ int main()
   fclose(f);
   printf("%ld\n", _2024_day16_part1(buf, length));
 }
+*/
