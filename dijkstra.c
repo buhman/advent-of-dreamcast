@@ -13,6 +13,7 @@ void dijkstra_cartesian(const char * graph,
                         int start_x, int start_y,
                         int end_x, int end_y,
                         char wall,
+                        int turn_cost,
                         struct dijkstra_xy16 * prev,
                         int * dist)
 {
@@ -49,15 +50,8 @@ void dijkstra_cartesian(const char * graph,
       struct dijkstra_xy16 * xy = &prev[min.y * width + min.x];
       int dx = min.x - xy->x;
       int dy = min.y - xy->y;
-      if (min.y == 137) {
-        printf("xy % 2d % 2d pxy % 2d % 2d nxy % 2d % 2d dist %d\n",
-               min.x, min.y,
-               xy->x, xy->y,
-               nx, ny,
-               dist[min.y * width + min.x]);
-      }
       if (cartesian_neighbor[i].x != dx || cartesian_neighbor[i].y != dy)
-        turn = 1000;
+        turn = turn_cost;
 
       int alt = dist[min.y * width + min.x] + 1 + turn;
       if (alt < dist[ny * width + nx]) {

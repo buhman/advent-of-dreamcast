@@ -17,6 +17,7 @@ void dijkstra_cartesian(const char * graph,
                         int start_x, int start_y,
                         int end_x, int end_y,
                         char wall,
+                        int turn_cost,
                         struct dijkstra_xy16 * prev,
                         int * dist);
 

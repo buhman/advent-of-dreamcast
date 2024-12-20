@@ -39,12 +39,14 @@ static bool dijkstra_test_0(const char ** scenario)
   struct dijkstra_xy16 prev[width * height];
   int dist[width * height];
 
+  int turn_cost = 100;
   dijkstra_cartesian(graph,
                      stride,
                      width, height,
                      end_x, end_y,
                      start_x, start_y,
                      '#',
+                     turn_cost,
                      prev,
                      dist);
 

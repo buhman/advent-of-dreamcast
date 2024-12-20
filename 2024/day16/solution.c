@@ -64,12 +64,14 @@ int64_t _2024_day16_part1(const char * input, int length)
   struct dijkstra_xy16 prev[width * height];
   int dist[width * height];
 
+  int turn_cost = 1000;
   dijkstra_cartesian(input,
                      stride,
                      width, height,
                      start_x, start_y,
                      end_x, end_y,
                      '#',
+                     turn_cost,
                      prev,
                      dist);
 

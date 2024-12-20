@@ -70,4 +70,7 @@ DAY_OBJ = \
 	2024/day17/sample1.txt.o \
 	2024/day17/sample2.txt.o \
 	2024/day17/input.txt.o \
-	2024/day17/solution.o
+	2024/day17/solution.o \
+	2024/day18/sample1.txt.o \
+	2024/day18/input.txt.o \
+	2024/day18/solution.o
